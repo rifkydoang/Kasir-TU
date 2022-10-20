@@ -19,7 +19,7 @@ import view.form_kasir;
  * @author astse
  */
 public class model_kasir implements Interfaces2{
-
+int stok, harga, jumlah;
     @Override
     public void Simpan(form_kasir kasir) throws SQLException {
         try {
@@ -79,28 +79,37 @@ public class model_kasir implements Interfaces2{
         }
     }
     
-    public void tampilHarga(form_kasir kasir) throws SQLException{
+    public void tampilDataBarang(form_kasir kasir) throws SQLException{
         String tmp = (String) kasir.cmbnamaBarang.getSelectedItem();
         try {
             Connection con = basisdata.getKoneksi();
-            String sql = "SELECT harga FROM data_barang WHERE nama_barang=?";
+            String sql = "SELECT harga, stok FROM data_barang WHERE nama_barang=?";
             PreparedStatement pr = con.prepareStatement(sql);
             pr.setString(1, tmp);
             ResultSet rs = pr.executeQuery();
             if (rs.next()) {
-                kasir.txtHarga.setText(rs.getString("harga"));
+                harga = Integer.valueOf(rs.getString("harga"));
+                stok = Integer.valueOf(rs.getString("stok"));
+                kasir.txtHarga.setText(String.valueOf(harga));
+                kasir.labelStok.setText(String.valueOf(stok));
             }
+           
         } catch (Exception e) {
             System.out.println(e);
         }
     }
     
     public void totalTransaksi(form_kasir kasir){
-        int harga, jumlah, total;
+        int harga, total;
         
         harga = Integer.parseInt(kasir.txtHarga.getText());
         jumlah = Integer.parseInt((String) kasir.cmbJumlah.getSelectedItem());
         total = jumlah * harga;
+        
+        if (jumlah > stok) {
+            JOptionPane.showMessageDialog(null, "Stock Hannya Tersisa "+stok);
+            
+        }
         
         kasir.txttotalBayar.setText(String.valueOf(total));
         kasir.txtBiaya.setText(String.valueOf("Rp."+total));
@@ -196,4 +205,23 @@ public class model_kasir implements Interfaces2{
             System.out.println(e);
         }
     }
+    
+    public void UpdateDataStokJam(form_kasir kasir) throws SQLException{
+      String tmp = (String) kasir.cmbnamaBarang.getSelectedItem();
+      stok -= jumlah;
+       try {
+            Connection con = basisdata.getKoneksi();
+            String sql = "UPDATE data_barang SET stok=? WHERE nama_barang=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, stok);
+            pst.setString(2, tmp);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Data berhasil diubah");
+            kasir.labelStok.setText(String.valueOf(stok));
+            pst.close();
+       } catch (Exception e) {
+           JOptionPane.showMessageDialog(null, "Data Gagal Diubah");
+            System.out.println(e);
+       }
+   }
 }

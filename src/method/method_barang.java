@@ -24,11 +24,12 @@ public class method_barang implements Interfaces{
     public void Simpan(barang_sekolah barang) throws SQLException {
         try {
             Connection con = basisdata.getKoneksi();
-            String sql = "INSERT INTO data_barang VALUES (?,?,?)";
+            String sql = "INSERT INTO data_barang VALUES (?,?,?,?)";
             PreparedStatement prr = con.prepareStatement(sql);
             prr.setInt(1, Integer.parseInt(barang.txtidBarang.getText()));
             prr.setString(2, barang.txtnamaBarang.getText());
             prr.setInt(3, Integer.valueOf(barang.txthargaBarang.getText()));
+            prr.setInt(4, Integer.valueOf(barang.txtstok.getText()));
             prr.executeUpdate();
             JOptionPane.showMessageDialog(null, "Data berhasil di simpan");
             prr.close();
@@ -46,12 +47,13 @@ public class method_barang implements Interfaces{
     public void Ubah(barang_sekolah barang) throws SQLException {
         try {
             Connection con = basisdata.getKoneksi();
-            String sql = "UPDATE data_barang SET nama_barang=?, harga=? WHERE id_barang=?";
+            String sql = "UPDATE data_barang SET nama_barang=?, harga=? , stok=? WHERE id_barang=?";
             PreparedStatement prepare = con.prepareStatement(sql);
             
-            prepare.setInt(3, Integer.valueOf(barang.txtidBarang.getText()));
+            prepare.setInt(4, Integer.valueOf(barang.txtidBarang.getText()));
             prepare.setString(1, barang.txtnamaBarang.getText());
             prepare.setInt(2, Integer.valueOf(barang.txthargaBarang.getText()));
+            prepare.setInt(3, Integer.valueOf(barang.txtstok.getText()));
             prepare.executeUpdate();
             JOptionPane.showMessageDialog(null, "Data berhasil diubah");
             prepare.close();
@@ -100,6 +102,7 @@ public class method_barang implements Interfaces{
                 ob[0] = res.getString(1);
                 ob[1] = res.getString(2);
                 ob[2] = res.getString(3);
+                ob[3] = res.getString(4);
                 barang.tblmodel.addRow(ob);
             }        
         }catch (Exception e) {
@@ -117,6 +120,7 @@ public class method_barang implements Interfaces{
             barang.txtidBarang.setText(barang.tblmodel.getValueAt(pilih, 0).toString());
             barang.txtnamaBarang.setText(barang.tblmodel.getValueAt(pilih, 1).toString());
             barang.txthargaBarang.setText(barang.tblmodel.getValueAt(pilih, 2).toString());
+            barang.txtstok.setText(barang.tblmodel.getValueAt(pilih, 3).toString());
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -126,6 +130,7 @@ public class method_barang implements Interfaces{
     public void Reset(barang_sekolah barang) throws SQLException {
         barang.txtnamaBarang.setText("");
         barang.txthargaBarang.setText("");
+        barang.txtstok.setText("");
     }
     
     public void AutoNumber(barang_sekolah barang) throws SQLException {
