@@ -31,9 +31,10 @@ public class form_kasir extends javax.swing.JFrame {
         table.setModel(tblmodel);
         model.Tampil(this);
         model.Batal(this);
-        model.tampilComboBarang(this);
+        model.tampilComboBarang(this);       
         model.autonumber(this);
         setLebarKolom();
+        
     }
 
     /**
@@ -102,6 +103,8 @@ public class form_kasir extends javax.swing.JFrame {
         txtKembalian = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        labelStok = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -169,12 +172,24 @@ public class form_kasir extends javax.swing.JFrame {
         jLabel6.setText("Harga");
 
         txtHarga.setEditable(false);
+        txtHarga.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                txtHargaInputMethodTextChanged(evt);
+            }
+        });
+        txtHarga.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtHargaKeyReleased(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel7.setText("Jumlah");
 
         cmbJumlah.setMaximumRowCount(50);
-        cmbJumlah.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Jumlah", "1", "2", "3", "4", "5", " " }));
+        cmbJumlah.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Jumlah", "1", "2", "3", "4", "5" }));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel8.setText("Tanggal");
@@ -231,6 +246,10 @@ public class form_kasir extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Stok :");
+
+        labelStok.setText("disini tampil stok");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -285,7 +304,11 @@ public class form_kasir extends javax.swing.JFrame {
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addComponent(cmbJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(btntTambah))))
+                                                .addComponent(btntTambah)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(labelStok))))
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1022, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 1, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -323,7 +346,9 @@ public class form_kasir extends javax.swing.JFrame {
                     .addComponent(cmbnamaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btntTambah))
+                    .addComponent(btntTambah)
+                    .addComponent(jLabel3)
+                    .addComponent(labelStok))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -370,7 +395,7 @@ public class form_kasir extends javax.swing.JFrame {
     private void cmbnamaBarangItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbnamaBarangItemStateChanged
         if (cmbnamaBarang.getSelectedIndex() > 0) {
             try {
-                model.tampilHarga(this);
+                model.tampilDataBarang(this);
             } catch (Exception e) {
                 Logger.getLogger(form_kasir.class.getName()).log(Level.SEVERE, null, e);
             }
@@ -380,6 +405,7 @@ public class form_kasir extends javax.swing.JFrame {
     private void btntTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntTambahActionPerformed
         try {
             model.totalTransaksi(this);
+            model.UpdateDataStokJam(this);
         } catch (Exception e) {
         }
     }//GEN-LAST:event_btntTambahActionPerformed
@@ -419,6 +445,7 @@ public class form_kasir extends javax.swing.JFrame {
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         try {
             model.KlikTable(this);
+            labelStok.setText("");
         } catch (Exception e) {
             Logger.getLogger(form_kasir.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -439,6 +466,18 @@ public class form_kasir extends javax.swing.JFrame {
             txtBiaya.setText(String.valueOf(kembalian));
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtHargaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHargaKeyReleased
+       int biaya = Integer.parseInt(txtBayar.getText());
+       
+       txtBiaya.setText(String.valueOf(biaya));
+    }//GEN-LAST:event_txtHargaKeyReleased
+
+    private void txtHargaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtHargaInputMethodTextChanged
+int biaya = Integer.parseInt(txtBayar.getText());
+       
+       txtBiaya.setText(String.valueOf(biaya));
+    }//GEN-LAST:event_txtHargaInputMethodTextChanged
 
     /**
      * @param args the command line arguments
@@ -490,6 +529,7 @@ public class form_kasir extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -499,6 +539,7 @@ public class form_kasir extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JLabel labelStok;
     public javax.swing.JTable table;
     public javax.swing.JTextField txtBayar;
     public javax.swing.JTextField txtBiaya;
