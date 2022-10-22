@@ -5,10 +5,15 @@
 package view;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -33,6 +38,7 @@ public class form_kasir extends javax.swing.JFrame {
         model.Batal(this);
         model.tampilComboBarang(this);       
         model.autonumber(this);
+        TampilJam();
         setLebarKolom();
         
     }
@@ -72,6 +78,35 @@ public class form_kasir extends javax.swing.JFrame {
             setColumnWidth(a);
         }
     }
+    
+    public void TampilJam(){
+        ActionListener taskPerformer = new ActionListener() {
+ 
+        @Override
+            public void actionPerformed(ActionEvent evt) {
+            java.util.Date tglsekarang = new java.util.Date();
+            SimpleDateFormat smpdtfmt = new SimpleDateFormat("dd MMMMMMMMM yyyy", Locale.getDefault());
+            String tanggal = smpdtfmt.format(tglsekarang);
+            String nol_jam = "", nol_menit = "",nol_detik = "";
+ 
+            java.util.Date dateTime = new java.util.Date();
+            int nilai_jam = dateTime.getHours();
+            int nilai_menit = dateTime.getMinutes();
+            int nilai_detik = dateTime.getSeconds();
+ 
+            if(nilai_jam <= 9) nol_jam= "0";
+            if(nilai_menit <= 9) nol_menit= "0";
+            if(nilai_detik <= 9) nol_detik= "0";
+ 
+            String jam = nol_jam + Integer.toString(nilai_jam);
+            String menit = nol_menit + Integer.toString(nilai_menit);
+            String detik = nol_detik + Integer.toString(nilai_detik);
+ 
+            txttgl.setText(tanggal+" "+jam+":"+menit+":"+detik+"");
+            }
+        };
+    new Timer(1000, taskPerformer).start();
+    } 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

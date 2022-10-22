@@ -216,11 +216,9 @@ int stok, harga, jumlah;
             pst.setInt(1, stok);
             pst.setString(2, tmp);
             pst.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Data berhasil diubah");
             kasir.labelStok.setText(String.valueOf(stok));
             pst.close();
        } catch (Exception e) {
-           JOptionPane.showMessageDialog(null, "Data Gagal Diubah");
             System.out.println(e);
        }
    }
